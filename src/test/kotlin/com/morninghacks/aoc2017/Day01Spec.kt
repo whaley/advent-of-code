@@ -42,7 +42,7 @@ object Day01Spec : Spek({
         on("captcha") {
             for ((input, expected) in dataProvider) {
                 it("should produce $expected") {
-                    assertEquals(expected, captcha(input))
+                    assertEquals(expected, captcha(input, input.length / 2))
                 }
             }
         }
