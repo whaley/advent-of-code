@@ -1,6 +1,10 @@
 package com.morninghacks.aoc2017
 
+import kotlin.math.abs
+
 /*
+Part One:
+
 The spreadsheet consists of rows of apparently-random numbers. To make sure the recovery process is on the right track, they need you to calculate the spreadsheet's checksum. For each row, determine the difference between the largest value and the smallest value; the checksum is the sum of all of these differences.
 
 For example, given the following spreadsheet:
@@ -14,13 +18,54 @@ For example, given the following spreadsheet:
     The third row's difference is 6.
 
 In this example, the spreadsheet's checksum would be 8 + 4 + 6 = 18.
+
+========================================================================================================================
+
+Part Two:
+
+It sounds like the goal is to find the only two numbers in each row where one evenly divides the other - that is, where the result of the division operation is a whole number. They would like you to find those numbers on each line, divide them, and add up each line's result.
+
+For example, given the following spreadsheet:
+
+5 9 2 8
+9 4 7 3
+3 8 6 5
+
+    In the first row, the only two numbers that evenly divide are 8 and 2; the result of this division is 4.
+    In the second row, the two numbers are 9 and 3; the result is 3.
+    In the third row, the result is 2.
+
+In this example, the sum of the results would be 4 + 3 + 2 = 9.
  */
 
-fun checksum(spreadsheet: String): Int {
+fun checksum(spreadsheet: String, lineSummer: (List<Int>) -> Int = ::minAndMax): Int {
     val lines = spreadsheet.split("\n")
-    val rows : List<List<Int>> = lines.map { it -> it.split(Regex("""\s""")).map { it -> Integer.valueOf(it) } }
+    val rows: List<List<Int>> = lines.map { line -> line.split(Regex("""\s""")).map { num -> Integer.valueOf(num) } }
 
-    return rows.fold(0, {sum:Int, list: List<Int> -> sum + (list.max() ?: 0) - (list.min() ?: 0)})
+    return rows.fold(0, { sum: Int, list ->  sum + lineSummer(list)})
+}
+
+fun minAndMax(list: List<Int>): Int {
+    return abs((list.max() ?: 0)  - (list.min() ?: 0))
+}
+
+fun evenlyDivides(list: List<Int>): Int {
+    val pair : Pair<Int,Int>? = allPairs(list).find { it -> it.first % it.second == 0 || it.second % it.first == 0 }
+    return when {
+        pair == null -> 0
+        pair.first > pair.second -> pair.first / pair.second
+        else -> pair.second / pair.first
+    }
+}
+
+fun <T> allPairs(list: List<T>): List<Pair<T, T>> {
+    val pairs = arrayListOf<Pair<T, T>>()
+    for ((index, left) in list.withIndex()) {
+        if (index != list.size - 1) {
+            list.subList(index + 1, list.size).mapTo(pairs) { left to it }
+        }
+    }
+    return pairs
 }
 
 fun main(args: Array<String>) {
@@ -40,5 +85,7 @@ fun main(args: Array<String>) {
 826	4028	4274	163	5303	4610	145	5779	157	4994	5053	186	5060	3082	2186	4882
 588	345	67	286	743	54	802	776	29	44	107	63	303	372	41	810
 128	2088	3422	111	3312	740	3024	1946	920	131	112	477	3386	2392	1108	2741"""
-    println(checksum(input))
+    println(checksum(input, ::minAndMax))
+    println(checksum(input, ::evenlyDivides))
+
 }
