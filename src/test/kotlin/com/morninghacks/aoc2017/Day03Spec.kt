@@ -18,6 +18,5 @@ object Day03Spec : Spek({
             }
         }
     }
-
 })
 
