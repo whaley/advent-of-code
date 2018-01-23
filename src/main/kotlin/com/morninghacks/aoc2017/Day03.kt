@@ -39,7 +39,6 @@ fun main(args: Array<String>) {
 
 data class Point(val x: Int, val y: Int)
 
-
 fun createGridUntil(target: Int) : Map<Point,Int>{
     val initial = Point(0, 0)
     val knownPointsAndScores = hashMapOf(initial to 1)
