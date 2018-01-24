@@ -32,7 +32,7 @@ object Day04Spec : Spek({
         on("noAnagrams") {
             for ((input, expected) in testData) {
                 it("should return $expected when given input of $input") {
-                    assertEquals(expected, noDuplicates(input))
+                    assertEquals(expected, noAnagrams(input))
                 }
             }
         }
