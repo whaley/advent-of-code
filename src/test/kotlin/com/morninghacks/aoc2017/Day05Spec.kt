@@ -7,11 +7,12 @@ import org.jetbrains.spek.api.dsl.on
 import kotlin.test.assertEquals
 
 object Day05Spec : Spek({
-    given("Day Five : Part One") {
-        val testJumpList = listOf(0, 3, 0, 1, -3)
-        val expectedSteps = 5
+    val testJumpList = listOf(0, 3, 0, 1, -3)
 
-        on("calculateNumberOfJumps") {
+    given("Day Five : Part One") {
+
+        on("calculateNumberOfJumps when incrementing") {
+            val expectedSteps = 5
             it("should return $expectedSteps when given jumpList of $testJumpList") {
                 assertEquals(expectedSteps, calculateNumberOfJumps(testJumpList))
             }
@@ -19,9 +20,12 @@ object Day05Spec : Spek({
     }
 
     given("Day Five : Part Two") {
-        on("drugs") {
+        on("calculateNumberOfJumps when increment, unless greater than 3, then decrement") {
+            val expectedSteps = 10
+            val postJumpAction = {i: Int -> if (i >= 3) i - 1 else i + 1}
+
             it("should be high") {
-                //TODO: implement
+                assertEquals(expectedSteps, calculateNumberOfJumps(testJumpList,postJumpAction))
             }
         }
 
