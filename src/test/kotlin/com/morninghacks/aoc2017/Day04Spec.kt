@@ -8,7 +8,7 @@ import kotlin.test.assertEquals
 
 
 object Day04Spec : Spek({
-    given("Day Three : Part One") {
+    given("Day Four : Part One") {
         val testData = mapOf("aa bb cc dd ee" to true,
                 "aa bb cc dd aa" to false,
                 "aa bb cc dd aaa" to true)
@@ -22,7 +22,7 @@ object Day04Spec : Spek({
         }
     }
 
-    given("Day Three : Part Two") {
+    given("Day Four : Part Two") {
         val testData = mapOf("abcde fghij" to true,
                 "abcde xyz ecdab" to false,
                 "a ab abc abd abf abj" to true,
