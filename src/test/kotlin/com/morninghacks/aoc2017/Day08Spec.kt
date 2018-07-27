@@ -19,7 +19,7 @@ object Day08Spec : Spek({
             val expected = listOf(
                     Instruction("b", 5, Condition("a", GreaterThan, 1)),
                     Instruction("a", 1, Condition("b", LessThan, 5)),
-                    Instruction("c", 10, Condition("a", LessThanOrEqualTo, 1)),
+                    Instruction("c", 10, Condition("a", GreaterThanOrEqualTo, 1)),
                     Instruction("c", -20, Condition("c", EqualTo, 10))
             )
             it("input of $input should result in instruction list of $expected") {
@@ -29,7 +29,7 @@ object Day08Spec : Spek({
 
         on("Input of $input") {
             it("should result in registers of {a:1, b:0, c:-20}") {
-                assertEquals(mapOf("a" to 1, "b" to 0, "c" to -20), runInstructions(input))
+                assertEquals(mapOf("a" to 1, "b" to 0, "c" to -10), runInstructions(input))
             }
         }
     }

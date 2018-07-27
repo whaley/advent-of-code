@@ -1,5 +1,7 @@
 package com.morninghacks.aoc2017
 
+import java.lang.invoke.MethodHandles
+
 /*
 You receive a signal directly from the CPU. Because of your recent assistance with jump instructions, it would like you to compute the result of a series of unusual register instructions.
 
@@ -55,17 +57,55 @@ data class Instruction(val registerName: String, val incValue: Int, val conditio
 data class Condition(val registerName: String, val comparisonOperator: ComparisonOperator, val value: Int)
 
 fun runInstructions(input: String): Map<String, Int> {
-    parseInput(input)
     return runInstructions(parseInput(input))
 }
 
 fun runInstructions(instructions: List<Instruction>): Map<String, Int> {
-    return mapOf()
+    val registers = mutableMapOf<String, Int>()
+    for (instruction in instructions) {
+        val cond = instruction.condition
+        registers.putIfAbsent(instruction.registerName, 0)
+        registers.putIfAbsent(cond.registerName, 0)
+        if (cond.comparisonOperator.apply(registers.getOrDefault(cond.registerName, 0), cond.value)) {
+            registers.merge(instruction.registerName, instruction.incValue) { orig, incBy -> orig + incBy }
+        }
+    }
+    return registers
 }
 
 fun parseInput(input: String): List<Instruction> {
-    return listOf()
+    return input.lines()
+            .filter(String::isNotBlank)
+            .map(::lineToInstruction)
+
 }
+
+fun lineToInstruction(line: String): Instruction {
+    val parts: List<String> = line.trim().split("""\s""".toRegex())
+    val registerName: String = parts[0]
+    val incBy: Int = if (parts[1] == "inc") parts[2].toInt() else parts[2].toInt() * -1
+    val conditionRegisterName: String = parts[4]
+    val conditionValue: Int = parts[6].toInt()
+    val operator: ComparisonOperator = when (parts[5]) {
+        "==" -> EqualTo
+        "!=" -> NotEqualTo
+        ">" -> GreaterThan
+        ">=" -> GreaterThanOrEqualTo
+        "<" -> LessThan
+        "<=" -> LessThanOrEqualTo
+        else -> throw IllegalArgumentException()
+    }
+
+    return Instruction(registerName, incBy, Condition(conditionRegisterName, operator, conditionValue))
+}
+
+fun main(args: Array<String>) {
+    val input = MethodHandles.lookup().lookupClass().getResourceAsStream("/Day08Input.txt").bufferedReader().readText()
+    val registers = runInstructions(input)
+    val maxRegisterValue = registers.values.max()
+    println("Part One Answer: $maxRegisterValue")
+}
+
 
 
 
