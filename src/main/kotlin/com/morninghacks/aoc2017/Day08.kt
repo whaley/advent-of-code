@@ -55,22 +55,31 @@ object NotEqualTo : ComparisonOperator() {
 
 data class Instruction(val registerName: String, val incValue: Int, val condition: Condition)
 data class Condition(val registerName: String, val comparisonOperator: ComparisonOperator, val value: Int)
+data class Results(val registers: Map<String, Int>, val highestSeenValue: Int)
 
-fun runInstructions(input: String): Map<String, Int> {
+fun runInstructions(input: String): Results {
     return runInstructions(parseInput(input))
 }
 
-fun runInstructions(instructions: List<Instruction>): Map<String, Int> {
+fun runInstructions(instructions: List<Instruction>): Results {
+    var highestSeenValue: Int = Int.MIN_VALUE
     val registers = mutableMapOf<String, Int>()
     for (instruction in instructions) {
         val cond = instruction.condition
         registers.putIfAbsent(instruction.registerName, 0)
         registers.putIfAbsent(cond.registerName, 0)
         if (cond.comparisonOperator.apply(registers.getOrDefault(cond.registerName, 0), cond.value)) {
-            registers.merge(instruction.registerName, instruction.incValue) { orig, incBy -> orig + incBy }
+            registers.merge(instruction.registerName, instruction.incValue, fun(orig, incBy): Int {
+                //This is mildly disgusting, but gets the answer quickly
+                val res = orig + incBy
+                if (res > highestSeenValue) {
+                    highestSeenValue = res
+                }
+                return res
+            })
         }
     }
-    return registers
+    return Results(registers, highestSeenValue)
 }
 
 fun parseInput(input: String): List<Instruction> {
@@ -101,9 +110,10 @@ fun lineToInstruction(line: String): Instruction {
 
 fun main(args: Array<String>) {
     val input = MethodHandles.lookup().lookupClass().getResourceAsStream("/Day08Input.txt").bufferedReader().readText()
-    val registers = runInstructions(input)
-    val maxRegisterValue = registers.values.max()
-    println("Part One Answer: $maxRegisterValue")
+    val results = runInstructions(input)
+
+    println("Part One Answer: ${results.registers.values.max()}")
+    println("Part Two Answer: ${results.highestSeenValue}")
 }
 
 

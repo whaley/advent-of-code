@@ -14,7 +14,7 @@ object Day08Spec : Spek({
         c inc -20 if c == 10
 """
 
-    given("Day Eight : Part One") {
+    given("Day Eight") {
         on("parseInput") {
             val expected = listOf(
                     Instruction("b", 5, Condition("a", GreaterThan, 1)),
@@ -29,7 +29,7 @@ object Day08Spec : Spek({
 
         on("Input of $input") {
             it("should result in registers of {a:1, b:0, c:-20}") {
-                assertEquals(mapOf("a" to 1, "b" to 0, "c" to -10), runInstructions(input))
+                assertEquals(Results(mapOf("a" to 1, "b" to 0, "c" to -10), 10), runInstructions(input))
             }
         }
     }
