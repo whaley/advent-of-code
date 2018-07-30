@@ -1,10 +1,12 @@
 package com.morninghacks.aoc2017
 
-val GROUP_START_TOKEN = '{'
-val GROUP_END_TOKEN = '}'
-val GARBAGE_START_TOKEN = '<'
-val GARBAGE_END_TOKEN = '>'
-val ESCAPE_TOKEN = '!'
+import java.lang.invoke.MethodHandles
+
+const val GROUP_START_TOKEN = '{'
+const val GROUP_END_TOKEN = '}'
+const val GARBAGE_START_TOKEN = '<'
+const val GARBAGE_END_TOKEN = '>'
+const val ESCAPE_TOKEN = '!'
 
 sealed class Container
 class Garbage(val contents: String) : Container()
@@ -41,4 +43,11 @@ fun parseTree(input: CharIterator, groupBeingBuilt: Group? = null): Group? {
         }
     }
     return groupBeingBuilt
+}
+
+fun main(args: Array<String>) {
+    val input = MethodHandles.lookup().lookupClass().getResourceAsStream("/Day09Input.txt")
+            .bufferedReader().readText().trim()
+    val group = parseTree(input.iterator())
+    println("Score of Day 09 Input For All Groups is ${group?.score()}")
 }
