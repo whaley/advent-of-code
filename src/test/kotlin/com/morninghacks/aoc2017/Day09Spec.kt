@@ -49,7 +49,7 @@ object Day09Spec : Spek({
 
             for (case in cases) {
                 it("input of ${case.input} should result in instruction list of ${case.numberOfGroups} groups") {
-                    assertEquals(case.numberOfGroups, parseTree(case.input).countGroups())
+                    assertEquals(case.numberOfGroups, parseTree(case.input.iterator()).countGroups())
                 }
             }
         }
