@@ -10,6 +10,7 @@ sealed class Container
 class Garbage(val contents: String) : Container()
 class Group(val contents: MutableList<Container>) : Container() {
     fun countGroups(): Int = 1 + contents.filterIsInstance<Group>().map(Group::countGroups).sum()
+    fun score(level: Int = 1): Int = 1 + contents.filterIsInstance<Group>().map { g -> level + g.score(level + 1)}.sum()
 }
 
 fun parseTree(input: CharIterator, groupBeingBuilt: Group? = null): Group? {

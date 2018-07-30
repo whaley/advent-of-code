@@ -34,9 +34,8 @@ Your goal is to find the total score for all groups in your input. Each group is
 object Day09Spec : Spek({
     given("Day Nine") {
         on("parseTree") {
-            data class Case(val input: String, val numberOfGroups: Int)
-
-            val cases = listOf(
+            data class Case(val input: String, val value: Int)
+            val countGroupsCases = listOf(
                     Case("{}", 1),
                     Case("{{{}}}", 3),
                     Case("{{},{}}", 3),
@@ -47,11 +46,28 @@ object Day09Spec : Spek({
                     Case("{{<!>},{<!>},{<!>},{<a>}}", 2)
             )
 
-            for (case in cases) {
-                it("input of ${case.input} should result in instruction list of ${case.numberOfGroups} groups") {
-                    assertEquals(case.numberOfGroups, parseTree(case.input.iterator())?.countGroups())
+            for (case in countGroupsCases) {
+                it("input of ${case.input} should result in a total ${case.value} groups") {
+                    assertEquals(case.value, parseTree(case.input.iterator())?.countGroups())
                 }
             }
+
+            val scoreCases = listOf(
+                    Case("{}", 1),
+                    Case("{{{}}}", 6),
+                    Case("{{},{}}", 5),
+                    Case("{{{},{},{{}}}}", 16),
+                    Case("{<a>,<a>,<a>,<a>}", 1),
+                    Case("{{<ab>},{<ab>},{<ab>},{<ab>}}", 9),
+                    Case("{{<!!>},{<!!>},{<!!>},{<!!>}}", 9),
+                    Case("{{<a!>},{<a!>},{<a!>},{<ab>}}", 3)
+            )
+            for (case in scoreCases) {
+                it("input of ${case.input} should result in a score of ${case.value}") {
+                    assertEquals(case.value, parseTree(case.input.iterator())?.score())
+                }
+            }
+
         }
     }
 })
