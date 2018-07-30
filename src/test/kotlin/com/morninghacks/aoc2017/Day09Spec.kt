@@ -29,6 +29,19 @@ Your goal is to find the total score for all groups in your input. Each group is
     {{<!!>},{<!!>},{<!!>},{<!!>}}, score of 1 + 2 + 2 + 2 + 2 = 9.
     {{<a!>},{<a!>},{<a!>},{<ab>}}, score of 1 + 2 = 3.
 
+Now, you're ready to remove the garbage.
+
+To prove you've removed it, you need to count all of the characters within the garbage. The leading and trailing < and > don't count, nor do any canceled characters or the ! doing the canceling.
+
+    <>, 0 characters.
+    <random characters>, 17 characters.
+    <<<<>, 3 characters.
+    <{!>}>, 2 characters.
+    <!!>, 0 characters.
+    <!!!>>, 0 characters.
+    <{o"i!a,<{i<a>, 10 characters.
+
+
  */
 
 object Day09Spec : Spek({
@@ -68,7 +81,25 @@ object Day09Spec : Spek({
                 }
             }
 
+            val numberOfCharacterCases = listOf(
+                    Case("{<>}", 0),
+                    Case("{<random characters>}", 17),
+                    Case("{<<<<>}", 3),
+                    Case("{<{!>}>}", 2),
+                    Case("{<!!>}", 0),
+                    Case("{<!!!>>}", 0),
+                    Case("{<{o\"i!a,<{i<a>}", 10)
+            )
+
+            for (case in numberOfCharacterCases) {
+                it("input of ${case.input} should result in a total number of characters of ${case.value}") {
+                    assertEquals(case.value, parseTree(case.input.iterator())?.totalCharacters())
+                }
+            }
+
         }
+
+
     }
 })
 

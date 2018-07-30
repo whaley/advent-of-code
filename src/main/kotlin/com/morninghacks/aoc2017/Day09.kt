@@ -13,6 +13,12 @@ class Garbage(val contents: String) : Container()
 class Group(val contents: MutableList<Container>) : Container() {
     fun countGroups(): Int = 1 + contents.filterIsInstance<Group>().map(Group::countGroups).sum()
     fun score(level: Int = 1): Int = 1 + contents.filterIsInstance<Group>().map { g -> level + g.score(level + 1)}.sum()
+    fun totalCharacters(): Int = contents.map(fun(container: Container) : Int {
+        return when (container) {
+            is Garbage -> container.contents.length
+            is Group -> container.totalCharacters()
+        }
+    }).sum()
 }
 
 fun parseTree(input: CharIterator, groupBeingBuilt: Group? = null): Group? {
@@ -34,10 +40,15 @@ fun parseTree(input: CharIterator, groupBeingBuilt: Group? = null): Group? {
                 else return groupBeingBuilt
             }
             GARBAGE_START_TOKEN -> {
-                garbageTextBuilder = StringBuilder(); isGarbage = true
+                if (isGarbage) garbageTextBuilder.append(current)
+                else {
+                    garbageTextBuilder = StringBuilder()
+                    isGarbage = true
+                }
             }
             GARBAGE_END_TOKEN -> {
-                groupBeingBuilt?.contents?.add(Garbage(garbageTextBuilder.toString())); isGarbage = false
+                groupBeingBuilt?.contents?.add(Garbage(garbageTextBuilder.toString()))
+                isGarbage = false
             }
             else -> garbageTextBuilder.append(current)
         }
@@ -50,4 +61,5 @@ fun main(args: Array<String>) {
             .bufferedReader().readText().trim()
     val group = parseTree(input.iterator())
     println("Score of Day 09 Input For All Groups is ${group?.score()}")
+    println("Total number of characters in Day 09 Input is ${group?.totalCharacters()}")
 }
