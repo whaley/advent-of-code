@@ -1,14 +1,8 @@
 import unittest
 
-def freqChangeToInt(change):
-    sign = change[0]
-    num = int(change[1:])
-    return num if sign is not '-' else num * -1
-
-
 def calcFrequencies(current = 0, changes = []):
     for change in changes:
-        current = current + freqChangeToInt(change)
+        current = current + int(change)
     return current
 
 def firstRepeated(current = 0, changes = []):
@@ -16,7 +10,7 @@ def firstRepeated(current = 0, changes = []):
     idx = 0
     while current not in seenFreqs:
         seenFreqs.add(current)
-        current = current + freqChangeToInt(changes[idx])
+        current = current + int(changes[idx])
         idx = idx + 1
         idx = idx if idx < len(changes) else 0
     return current
