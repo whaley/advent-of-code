@@ -17,17 +17,13 @@ func computeFrequency(freqChanges []string) int {
 func findRepeatingFrequency(freqChanges []string) int {
 	freq := 0
 	seen := make(map[int]bool)
-
-	_, isRepeat := seen[freq]
 	idx := 0
 
-	for isRepeat == false {
+	for !seen[freq] {
 		seen[freq] = true
 
 		change := stringToInt(freqChanges[idx])
 		freq += change
-
-		_, isRepeat = seen[freq]
 
 		idx++
 		if idx == len(freqChanges) {
