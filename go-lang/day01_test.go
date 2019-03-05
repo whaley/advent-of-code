@@ -6,7 +6,7 @@ import (
 	"testing"
 )
 
-func TestPt1(t *testing.T) {
+func TestDay01Pt1(t *testing.T) {
 	testCases := []struct {
 		input    []string
 		expected int
@@ -23,7 +23,7 @@ func TestPt1(t *testing.T) {
 	}
 }
 
-func TestPt2(t *testing.T) {
+func TestDay01Pt2(t *testing.T) {
 	testCases := []struct {
 		input    []string
 		expected int
