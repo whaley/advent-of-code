@@ -8,6 +8,7 @@ import (
 
 func main() {
 	day01()
+	day02()
 }
 
 func check(e error) {
@@ -22,10 +23,16 @@ func readFully(filepath string) string {
 	return string(dat)
 }
 
+func delimitByNewLine(s string) []string {
+	lines := strings.Split(s, "\n")
+	for idx, freq := range lines {
+		lines[idx] = strings.TrimSpace(freq)
+	}
+	return lines
+}
 
-func day01() error {
-	data := readFully("day01.txt")
-	freqs := strings.Split(data,"\n")
+func day01() {
+	freqs := delimitByNewLine(readFully("day01.txt"))
 	for idx, freq := range freqs {
 		freqs[idx] = strings.TrimSpace(freq)
 	}
@@ -35,5 +42,12 @@ func day01() error {
 
 	fmt.Printf("Day 01 : Part 01  Answer:\n\t%d\n", pt1Answer)
 	fmt.Printf("Day 01 : Part 02  Answer:\n\t%d\n", pt2Answer)
-	return nil
+}
+
+func day02() {
+	strings := delimitByNewLine(readFully("day02.txt"))
+
+	pt1Answer := computeChecksum(strings)
+
+	fmt.Printf("Day 02 : Part 01  Answer:\n\t%d\n", pt1Answer)
 }

@@ -14,5 +14,19 @@ func calculateRepeats(s string) map[int]bool {
 }
 
 func computeChecksum(input []string) int {
-	return 0
+	repeatCount := make(map[int]int)
+	for _, s := range input {
+		repeats := calculateRepeats(s)
+		for entry := range repeats {
+			repeatCount[entry] = repeatCount[entry] + 1
+		}
+	}
+
+	product := 1
+	for k, v := range repeatCount {
+		if k != 1 {
+			product *= v
+		}
+	}
+	return product
 }
