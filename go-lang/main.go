@@ -48,6 +48,8 @@ func day02() {
 	strings := delimitByNewLine(readFully("day02.txt"))
 
 	pt1Answer := computeChecksum(strings)
+	pt2Answer := day02Pt2(strings)
 
 	fmt.Printf("Day 02 : Part 01  Answer:\n\t%d\n", pt1Answer)
+	fmt.Printf("Day 02 : Part 02  Answer:\n\t%s\n", pt2Answer)
 }
