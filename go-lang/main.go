@@ -9,6 +9,7 @@ import (
 func main() {
 	day01()
 	day02()
+	day03()
 }
 
 func check(e error) {
@@ -45,11 +46,25 @@ func day01() {
 }
 
 func day02() {
-	strings := delimitByNewLine(readFully("day02.txt"))
+	lines := delimitByNewLine(readFully("day02.txt"))
 
-	pt1Answer := computeChecksum(strings)
-	pt2Answer := day02Pt2(strings)
+	pt1Answer := computeChecksum(lines)
+	pt2Answer := day02Pt2(lines)
 
 	fmt.Printf("Day 02 : Part 01  Answer:\n\t%d\n", pt1Answer)
 	fmt.Printf("Day 02 : Part 02  Answer:\n\t%s\n", pt2Answer)
+}
+
+func day03() {
+	var rects []Rectangle
+	for _, line := range delimitByNewLine(readFully("day03.txt")) {
+		rect, err := createRect(line)
+		check(err)
+		rects = append(rects, rect)
+	}
+	grid := NewGrid(rects)
+	day0301Points:= grid.FilterBy(func(claims map[int]bool) bool {
+		return len(claims) > 1
+	})
+	fmt.Printf("Day 03 : Part 01  Answer:\n\t%d\n", len(day0301Points))
 }
