@@ -21,6 +21,10 @@ type Point struct {
 
 type Grid map[Point]map[int]bool
 
+func (rect Rectangle) SquareArea() int {
+	return rect.wide * rect.tall
+}
+
 //String input expected in the form of "#1 @ 1,3: 4x4"
 func createRect(input string) (Rectangle, error) {
 	regex := regexp.MustCompile(`#(?P<id>\d+)[\s@]+(?P<tlX>\d+),(?P<tlY>\d+)[:\s]+(?P<wide>\d+)x(?P<tall>\d+)`)
@@ -53,7 +57,7 @@ func createRect(input string) (Rectangle, error) {
 	return *rect, nil
 }
 
-func NewGrid(rects []Rectangle) Grid{
+func NewGrid(rects []Rectangle) Grid {
 	grid := Grid{}
 	for _, rect := range rects {
 		grid.addRectToGrid(rect)
@@ -77,7 +81,7 @@ func (grid Grid) addRectToGrid(rectangle Rectangle) {
 	}
 }
 
-func (grid Grid) FilterBy(filter func(map[int]bool) bool) []Point  {
+func (grid Grid) FilterBy(filter func(map[int]bool) bool) []Point {
 	var matchedPoints []Point
 	for point, claims := range grid {
 		if filter(claims) {
@@ -85,4 +89,26 @@ func (grid Grid) FilterBy(filter func(map[int]bool) bool) []Point  {
 		}
 	}
 	return matchedPoints
+}
+
+func FindNonOverlappingClaim(rects []Rectangle) (int, error) {
+	grid := NewGrid(rects)
+	//First, filter all points which have only a single claim, and provide a count per claimId for each square area it solely occupies
+	claimCount := map[int]int{}
+	pointsWithSingleClaim := grid.FilterBy(func(claims map[int]bool) bool {
+		return len(claims) == 1
+	})
+	for _, point := range pointsWithSingleClaim {
+		for claimId := range grid[point] {
+			claimCount[claimId] = claimCount[claimId] + 1
+		}
+	}
+
+	//Then loop through all of the passed in rectangles, calculate its total area, and see which rectangle's total area matches the count of square areas that it solely occupies
+	for _, rect := range rects {
+		if rect.SquareArea() == claimCount[rect.id] {
+			return rect.id, nil
+		}
+	}
+	return -1, fmt.Errorf("unable to find id with non-overlapping claim")
 }

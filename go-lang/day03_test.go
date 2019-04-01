@@ -13,7 +13,7 @@ func TestDay03InputToRectangle(t *testing.T) {
 		{"#1 @ 1,3: 4x4", Rectangle{1, 1, 3, 4, 4}},
 		{"#2 @ 3,1: 4x4", Rectangle{2, 3, 1, 4, 4,}},
 		{"#3 @ 5,5: 2x2", Rectangle{3, 5, 5, 2, 2,}},
-		{"#1 @ 604,100: 17x27", Rectangle{1, 604, 100, 17,27}},
+		{"#1 @ 604,100: 17x27", Rectangle{1, 604, 100, 17, 27}},
 	}
 
 	for _, tc := range cases {
@@ -122,4 +122,17 @@ func TestDay03Part01(t *testing.T) {
 		return len(claimSet) > 1
 	})
 	assert.Equal(t, 4, len(overlappingPoints))
+}
+
+func TestDay03Part02(t *testing.T) {
+	input := []Rectangle{
+		{1, 1, 3, 4, 4},
+		{2, 3, 1, 4, 4,},
+		{3, 5, 5, 2, 2,},
+	}
+	actual, err := FindNonOverlappingClaim(input)
+	if assert.NoError(t, err) {
+		assert.Equal(t, 3, actual)
+	}
+
 }

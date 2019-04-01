@@ -66,5 +66,11 @@ func day03() {
 	day0301Points:= grid.FilterBy(func(claims map[int]bool) bool {
 		return len(claims) > 1
 	})
+
+	id, err := FindNonOverlappingClaim(rects)
+	if err != nil {
+		panic(err)
+	}
 	fmt.Printf("Day 03 : Part 01  Answer:\n\t%d\n", len(day0301Points))
+	fmt.Printf("Day 03 : Part 02  Answer:\n\t%d\n", id)
 }
