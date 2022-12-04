@@ -47,8 +47,6 @@ def sets_have_containment(x: set[Any], y: set[Any]) -> bool:
     return smaller.issubset(larger)
 
 
-# what an awful method name, please forgive me
-
 def solve_pt1(pairs: list[tuple[str, str]]) -> int:
     num_of_inclusive_ranges = 0
     for pair in pairs:
@@ -59,7 +57,12 @@ def solve_pt1(pairs: list[tuple[str, str]]) -> int:
 
 
 def solve_pt2(pairs: list[tuple[str, str]]) -> int:
-    return 0
+    num_of_overlapping_pairs = 0
+    for pair in pairs:
+        range_a, range_b = rangeset(pair[0]), rangeset(pair[1])
+        if range_a & range_b:
+            num_of_overlapping_pairs += 1
+    return num_of_overlapping_pairs
 
 
 if __name__ == "__main__":
@@ -106,4 +109,4 @@ def test_solve_pt1(sample_input: list[tuple[str, str]]):
 
 
 def test_solve_pt2(sample_input: list[tuple[str, str]]):
-    assert solve_pt2(sample_input) == 70
+    assert solve_pt2(sample_input) == 4
