@@ -1,7 +1,5 @@
 import pytest
 
-from functools import cache
-
 from typing import Any
 
 
@@ -18,15 +16,6 @@ def solve_day04():
 def read_input() -> list[str]:
     with open("day04.txt") as f:
         return [line.strip() for line in f.readlines()]
-
-
-@cache
-def priority(char: str) -> int:
-    code_point = ord(char)
-    if ord('a') <= code_point <= ord('z'):
-        return code_point - ord('a') + 1
-    else:
-        return code_point - ord('A') + 1 + 26
 
 
 def rangeset(s: str) -> set[int]:
