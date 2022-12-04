@@ -23,30 +23,28 @@ def priority(char: str) -> int:
         return code_point - ord('A') + 1 + 26
 
 
+def charset(s: str) -> set[str]:
+    return {c for c in s}
+
+
 def solve_pt1(rucksacks: list[str]) -> int:
     summed_priority = 0
     for sack in rucksacks:
         midpoint = len(sack) // 2
         first_half, second_half = sack[:midpoint], sack[midpoint:]
-
-        chars_in_first_half = {c for c in first_half}
-        chars_in_second_half = {c for c in second_half}
-        char_in_both = (chars_in_first_half & chars_in_second_half).pop()
-
+        char_in_both = (charset(first_half) & charset(second_half)).pop()
         summed_priority += priority(char_in_both)
     return summed_priority
 
 
 def solve_pt2(rucksacks: list[str]) -> int:
-    def charset(s: str) -> set[str]:
-        return {c for c in s}
-
     i, j = 0, 3
     summed_priority = 0
     while j <= len(rucksacks):
         sack1, sack2, sack3 = rucksacks[i], rucksacks[i + 1], rucksacks[i + 2]
         common_char = (charset(sack1) & charset(sack2) & charset(sack3)).pop()
         summed_priority += priority(common_char)
+
         i, j = i + 3, j + 3
     return summed_priority
 
