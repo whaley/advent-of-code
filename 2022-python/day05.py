@@ -1,4 +1,5 @@
 from collections import defaultdict
+from copy import deepcopy
 
 import pytest
 
@@ -17,7 +18,7 @@ def solve_day05():
     lines = read_input()
     stacks, moves = map_input(lines)
     print(f"Part 1: {solve_pt1(stacks, moves)}")
-    # print(f"Part 2: {solve_pt2(lines)}")
+    print(f"Part 2: {solve_pt2(stacks, moves)}")
 
 
 def read_input() -> list[str]:
@@ -50,7 +51,7 @@ def generate_stacks(lines: list[str]) -> list[list[str]]:
     for line in lines:
         # chunk each line into strings of length 4, the chunk index is the stack
         for i in range(0, len(line), 4):
-            container = line[i:i+4].strip()
+            container = line[i:i + 4].strip()
             if container:
                 stack_number = (i + 4) // 4
                 # these are added in reverse order, the top container per stack is actually at 0th index
@@ -72,6 +73,7 @@ def generate_moves(lines: list[str]) -> list[Move]:
 
 
 def solve_pt1(stacks: list[list[str]], moves: list[Move]) -> str:
+    stacks = deepcopy(stacks)  # the stacks get mutated, so make a deep copy
     for move in moves:
         on_the_crane: list[str] = []
         for _ in range(move.count):
@@ -81,7 +83,13 @@ def solve_pt1(stacks: list[list[str]], moves: list[Move]) -> str:
 
 
 def solve_pt2(stacks: list[list[str]], moves: list[Move]) -> str:
-    return ""
+    stacks = deepcopy(stacks)  # the stacks get mutated, so make a deep copy
+    for move in moves:
+        on_the_crane: list[str] = []
+        for _ in range(move.count):
+            on_the_crane.append(stacks[move.take_from].pop())
+        stacks[move.add_to].extend(on_the_crane[::-1])
+    return "".join(stack[-1] for stack in stacks[1:])
 
 
 if __name__ == "__main__":
@@ -113,7 +121,7 @@ def test_solve_pt1(sample_starting_stacks: list[list[str]], sample_moves: list[M
 
 
 def test_solve_pt2(sample_starting_stacks: list[list[str]], sample_moves: list[Move]):
-    assert solve_pt2(sample_starting_stacks, sample_moves) == 4
+    assert solve_pt2(sample_starting_stacks, sample_moves) == "MCD"
 
 
 def test_map_input(sample_starting_stacks: list[list[str]], sample_moves: list[Move]):
