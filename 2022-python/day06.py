@@ -7,12 +7,11 @@ def solve_day06():
     print(f"Part 1: {solve_pt1(puzzle_input)}")
     print(f"Part 2: {solve_pt2(puzzle_input)}")
 
-
-def solve_pt1(buffer: str) -> int:
+def solve(buffer: str, marker_unique_length: int):
     # you can tell I'm practicing for interviews because I tried my damnedest to do this in linear time with a sliding window
     i, j = 0, 0
     chars_in_window: dict[str, idx] = {}
-    while j - i < 4 and j < len(buffer):
+    while j - i < marker_unique_length and j < len(buffer):
         next_char = buffer[j]
         if next_char not in chars_in_window:
             chars_in_window[next_char] = j
@@ -26,8 +25,12 @@ def solve_pt1(buffer: str) -> int:
     return j
 
 
-def solve_pt2(buffer: str):
-    return "Not Implemented"
+def solve_pt1(buffer: str) -> int:
+    return solve(buffer, 4)
+
+
+def solve_pt2(buffer: str) -> int:
+    return solve(buffer, 14)
 
 
 if __name__ == "__main__":
@@ -43,3 +46,15 @@ if __name__ == "__main__":
 ])
 def test_solve_pt1(buffer: str, expected: int):
     assert solve_pt1(buffer) == expected
+
+
+
+@pytest.mark.parametrize("buffer, expected", [
+    ("mjqjpqmgbljsphdztnvjfqwrcgsmlb", 19),
+    ("bvwbjplbgvbhsrlpgdmjqwftvncz", 23),
+    ("nppdvjthqldpwncqszvftbrmjlhg", 23),
+    ("nznrnfrfntjfmvfwmzdfjlvtqnbhcprsg", 29),
+    ("zcfzfwzzqfrljwzlrfnpqdbhtmscgvjw", 26),
+])
+def test_solve_pt2(buffer: str, expected: int):
+    assert solve_pt2(buffer) == expected
